@@ -1,5 +1,11 @@
 import { useState, useEffect } from "react";
 import { FaUser } from "react-icons/fa";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import authService from "../features/auth/authService";
+import { register, reset } from "../features/auth/authSlice";
+import Spinner from "../components/Spinner";
 
 function Register() {
   const [FormData, setFormData] = useState({
@@ -30,6 +36,25 @@ function Register() {
     online,
   } = FormData;
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { teacher, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.auth
+  );
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    }
+
+    if (isSuccess || teacher) {
+      navigate("/");
+    }
+
+    dispatch(reset());
+  }, [teacher, isError, isSuccess, message, navigate, dispatch]);
+
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -38,7 +63,28 @@ function Register() {
   };
   const onSubmit = (e) => {
     e.preventDefault();
+    if (password !== password2) {
+      toast.error("Passwords do not match");
+    } else {
+      const teacherData = {
+        fname,
+        lname,
+        email,
+        phone,
+        password,
+        gender,
+        district,
+        subjects,
+        physical,
+        online,
+      };
+      dispatch(register(teacherData));
+    }
   };
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <>
