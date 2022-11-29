@@ -5,20 +5,29 @@ import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Header from "./components/Header";
+import Homepage from "./pages/Homepage";
+import Footer from "./components/Footer";
 
 function App() {
   return (
     <>
+      <div className="circle" style={{ top: "-30%", right: "-8rem" }}></div>
+      <div className="circle" style={{ top: "36%", left: "-8rem" }}></div>
       <Router>
-        <div className="container">
+        <div className="page-container">
           <Header />
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-          </Routes>
+          <div className="container">
+            <Routes>
+              <Route path="/" element={<Homepage />} />
+              <Route path="/profile" element={<Dashboard />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+            </Routes>
+          </div>
+          <Footer />
         </div>
       </Router>
+
       <ToastContainer />
     </>
   );

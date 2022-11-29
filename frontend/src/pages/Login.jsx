@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { login, reset } from "../features/auth/authSlice";
 import Spinner from "../components/Spinner";
+import { TextInput, PasswordInput } from "@mantine/core";
 
 function Login() {
   const [FormData, setFormData] = useState({
@@ -65,7 +66,7 @@ function Login() {
       <section className="form">
         <form onSubmit={onSubmit}>
           <div className="form-group">
-            <input
+            <TextInput
               type="email"
               className="form-control"
               id="email"
@@ -77,7 +78,7 @@ function Login() {
           </div>
 
           <div className="form-group">
-            <input
+            <PasswordInput
               type="password"
               className="form-control"
               id="password"

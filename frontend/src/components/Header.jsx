@@ -16,16 +16,25 @@ function Header() {
 
   return (
     <header className="header">
-      <div className="logo">
-        <Link to="/">FindTuition</Link>
+      <div>
+        <Link className="brandlogo" to="/">
+          Find<span className="brandlogo-part">Tuition</span>
+        </Link>
       </div>
       <ul>
         {teacher ? (
-          <li>
-            <button className="btn" onClick={onLogout}>
-              <FaSignOutAlt /> Logout
-            </button>
-          </li>
+          <>
+            <li>
+              <Link to="/profile">
+                <FaUser /> {teacher.name}
+              </Link>
+            </li>
+            <li>
+              <button className="btn" onClick={onLogout}>
+                <FaSignOutAlt /> Logout
+              </button>
+            </li>
+          </>
         ) : (
           <>
             <li>
@@ -34,7 +43,7 @@ function Header() {
               </Link>
             </li>
             <li>
-              <Link to="/register">
+              <Link className="btn" to="/register">
                 <FaUser /> Register
               </Link>
             </li>

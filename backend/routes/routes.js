@@ -14,6 +14,7 @@ const { protect } = require("../middleware/authMiddleware");
 //router.route('/').get(getTeachers).post(addTeacher)
 
 router.get("/", getTeachers);
+router.post("/", getTeachers);
 
 router.post("/register", registerTeacher);
 
@@ -25,6 +26,6 @@ router.delete("/:id", protect, deleteTeacher);
 router.post("/login", loginTeacher);
 router.get("/me", protect, getMe);
 
-router.get("/test", protect, test);
+router.get("/test", test);
 
 module.exports = router;

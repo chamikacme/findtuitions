@@ -95,6 +95,11 @@ const registerTeacher = asyncHandler(async (req, res) => {
       name: teacher.fname + " " + teacher.lname,
       email: teacher.email,
       phone: teacher.phone,
+      gender: teacher.gender,
+      district: teacher.district,
+      subject: teacher.subjects,
+      physical: teacher.physical,
+      online: teacher.online,
       token: generateToken(teacher._id),
     });
   } else {
@@ -159,6 +164,11 @@ const loginTeacher = asyncHandler(async (req, res) => {
       name: teacher.fname + " " + teacher.lname,
       email: teacher.email,
       phone: teacher.phone,
+      gender: teacher.gender,
+      district: teacher.district,
+      subject: teacher.subjects,
+      physical: teacher.physical,
+      online: teacher.online,
       token: generateToken(teacher._id),
     });
   } else {
@@ -170,8 +180,7 @@ const loginTeacher = asyncHandler(async (req, res) => {
 // @dec Get My data
 // @route POST api/teachers/me
 const getMe = asyncHandler(async (req, res) => {
-  const myProfile = await Teacher.findById(req.teacher._id);
-  res.status(200).json(myProfile);
+  res.status(200).json(req.teacher);
 });
 
 //generate JWT
@@ -182,9 +191,8 @@ const generateToken = (id) => {
 };
 
 const test = asyncHandler(async (req, res) => {
-  res.status(200).json({
-    id: req.teacher.id,
-  });
+  const teacher = await Teacher.findOne({ subjects: "Bio" });
+  res.status(200).json(teacher);
 });
 
 module.exports = {
