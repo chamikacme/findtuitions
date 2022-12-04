@@ -30,12 +30,37 @@ const getTeachers = asyncHandler(async (req, res) => {
   res.status(200).json(teachers);
 });
 
+// @dec get Teacher (public)
+// @route GET api/teachers/:id
+const getTeacher = asyncHandler(async (req, res) => {
+  const teacher = await Teacher.findOne({ username: req.params.id });
+
+  if (!teacher) {
+    res.status(201).json({ found: false, data: null });
+  }
+
+  const publicTeacherData = {
+    username: teacher.username,
+    name: teacher.fname + " " + teacher.lname,
+    phone: teacher.phone,
+    email: teacher.email,
+    gender: teacher.gender,
+    district: teacher.district,
+    subjects: teacher.subjects,
+    physical: teacher.physical,
+    online: teacher.online,
+  };
+
+  res.status(200).json({ found: true, data: publicTeacherData });
+});
+
 // @dec add Teachers
 // @route POST api/teachers/register
 const registerTeacher = asyncHandler(async (req, res) => {
   const {
     fname,
     lname,
+    username,
     email,
     phone,
     password,
@@ -79,6 +104,7 @@ const registerTeacher = asyncHandler(async (req, res) => {
   const teacher = await Teacher.create({
     fname,
     lname,
+    username,
     email,
     phone,
     password: hashedPassword,
@@ -93,6 +119,7 @@ const registerTeacher = asyncHandler(async (req, res) => {
     res.status(201).json({
       _id: teacher.id,
       name: teacher.fname + " " + teacher.lname,
+      username: teacher.username,
       email: teacher.email,
       phone: teacher.phone,
       gender: teacher.gender,
@@ -177,6 +204,21 @@ const loginTeacher = asyncHandler(async (req, res) => {
   }
 });
 
+// @dec Check username availability
+// @route POST api/teachers/checkusername
+const checkUserName = asyncHandler(async (req, res) => {
+  const { username } = req.body;
+
+  //check for user email
+  const teacher = await Teacher.findOne({ username });
+
+  if (!teacher) {
+    res.status(200).json({ available: true });
+  } else {
+    res.status(200).json({ available: false });
+  }
+});
+
 // @dec Get My data
 // @route POST api/teachers/me
 const getMe = asyncHandler(async (req, res) => {
@@ -197,10 +239,12 @@ const test = asyncHandler(async (req, res) => {
 
 module.exports = {
   getTeachers,
+  getTeacher,
   registerTeacher,
   updateTeacher,
   deleteTeacher,
   loginTeacher,
   getMe,
+  checkUserName,
   test,
 };

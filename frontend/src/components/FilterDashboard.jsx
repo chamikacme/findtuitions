@@ -31,7 +31,6 @@ function FilterDashboard() {
   if (isLoading) {
     return <Spinner />;
   }
-
   return (
     <>
       <section className="content">

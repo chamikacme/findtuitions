@@ -7,6 +7,8 @@ import Register from "./pages/Register";
 import Header from "./components/Header";
 import Homepage from "./pages/Homepage";
 import Footer from "./components/Footer";
+import RegisterUserData from "./components/RegisterUserData";
+import PublicProfile from "./pages/PublicProfile";
 
 function App() {
   return (
@@ -22,6 +24,7 @@ function App() {
               <Route path="/profile" element={<Dashboard />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/:username" element={<PublicProfile />} />
             </Routes>
           </div>
           <Footer />

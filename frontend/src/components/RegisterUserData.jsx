@@ -5,17 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { register, reset } from "../features/auth/authSlice";
 import Spinner from "../components/Spinner";
-import {
-  TextInput,
-  Select,
-  MultiSelect,
-  SegmentedControl,
-  Switch,
-} from "@mantine/core";
-import subjectData from "../data/subjectData.json";
-import axios from "axios";
+import { TextInput, Select, SegmentedControl } from "@mantine/core";
 
-function Register() {
+function RegisterUserData() {
   const [FormData, setFormData] = useState({
     fname: "",
     lname: "",
@@ -24,18 +16,13 @@ function Register() {
     phone: "",
     password: "",
     password2: "",
-    subjects: "",
-    physical: "",
-    online: false,
   });
 
-  const { fname, lname, email, phone, password, password2 } = FormData;
+  const { fname, lname, username, email, phone, password, password2 } =
+    FormData;
 
   const [district, setDistrict] = useState(null);
-  const [subjects, setSubjects] = useState([]);
   const [gender, setGender] = useState("Male");
-  const [physical, setPhysical] = useState(null);
-  const [online, setOnline] = useState(false);
 
   const districtData = [
     "Ampara",
@@ -106,47 +93,20 @@ function Register() {
         password,
         gender,
         district,
-        subjects,
-        physical,
-        online,
       };
       dispatch(register(teacherData));
     }
   };
 
-  // checking username availability
-  const [username, setUsername] = useState("");
-  const [availability, setAvailability] = useState("");
-
-  const checkUsernamefunction = () => {
-    const usernameData = { username: username };
-    const API_URL = "/api/teachers/";
-    axios.post(API_URL + "checkusername", usernameData).then((res) => {
-      console.log(res.data);
-      if (res.data.available) {
-        setAvailability("");
-      } else {
-        setAvailability("Already taken!");
-      }
-    });
-  };
-
-  const handleOnBlur = () => {
-    checkUsernamefunction();
-  };
-
-  // check username ends here
-
   if (isLoading) {
     return <Spinner />;
   }
-
   return (
     <>
       <section className="heading">
-        <h1>
+        {/* <h1>
           <FaUser /> Register
-        </h1>
+        </h1> */}
         <p>Please create an account</p>
       </section>
 
@@ -183,12 +143,7 @@ function Register() {
                 name="username"
                 value={username}
                 placeholder="Username"
-                onChange={(e) => {
-                  setUsername(e.target.value);
-                  setAvailability("");
-                }}
-                error={availability}
-                onBlur={handleOnBlur}
+                onChange={onChange}
               />
             </div>
 
@@ -262,66 +217,9 @@ function Register() {
               />
             </div>
 
-            <div>
-              <MultiSelect
-                id="subjects"
-                name="subjects"
-                className="multiselect"
-                mt="xl"
-                data={subjectData}
-                placeholder="Select subjects"
-                clearButtonLabel="Clear selection"
-                clearable
-                maxSelectedValues={3}
-                searchable
-                nothingFound="Nothing found"
-                transitionDuration={150}
-                transition="pop-top-left"
-                transitionTimingFunction="ease"
-                value={subjects}
-                onChange={setSubjects}
-              />
-            </div>
-
-            <div>
-              <MultiSelect
-                id="physical"
-                name="physical"
-                className="multiselect"
-                mt="xl"
-                clearButtonLabel="Clear selection"
-                clearable
-                maxSelectedValues={3}
-                searchable
-                nothingFound="Nothing found"
-                transitionDuration={150}
-                transition="pop-top-left"
-                transitionTimingFunction="ease"
-                data={districtData}
-                value={physical}
-                onChange={setPhysical}
-                placeholder="Select districts you available for classes"
-              />
-            </div>
-
-            <div className="new">
-              <label className="switch-label">
-                Are you available for online classes?
-              </label>
-              <Switch
-                labelPosition="left"
-                onLabel="Yes"
-                offLabel="No"
-                size="md"
-                className="switch"
-                checked={online}
-                onChange={(event) => setOnline(event.currentTarget.checked)}
-              />
-            </div>
-
             <div className="form-group">
               <button type="submit" className="btn btn-block">
-                Submit
+                Register
               </button>
             </div>
           </div>
@@ -331,4 +229,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default RegisterUserData;

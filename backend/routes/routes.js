@@ -2,11 +2,13 @@ const express = require("express");
 const router = express.Router();
 const {
   getTeachers,
+  getTeacher,
   registerTeacher,
   updateTeacher,
   deleteTeacher,
   loginTeacher,
   getMe,
+  checkUserName,
   test,
 } = require("../controllers/teacherController");
 const { protect } = require("../middleware/authMiddleware");
@@ -16,7 +18,11 @@ const { protect } = require("../middleware/authMiddleware");
 router.get("/", getTeachers);
 router.post("/", getTeachers);
 
+router.get("/:id", getTeacher);
+
 router.post("/register", registerTeacher);
+
+router.post("/checkusername", checkUserName);
 
 //router.route('/:id').delete(deleteTeacher).put(updateTeacher)
 
