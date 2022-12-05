@@ -1,49 +1,16 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { addFilter } from "../features/teachers/teacherSlice";
 import { Select } from "@mantine/core";
 import subjectData from "../data/subjectData.json";
+import districtData from "../data/districtData.json";
 
-function Filter() {
-  const [filterSubject, setFilterSubject] = useState("");
-  const [filterPhysical, setFilterPhysical] = useState("");
-
-  const dispatch = useDispatch();
-
-  const districtData = [
-    "Any District",
-    "Ampara",
-    "Anuradhapura",
-    "Badulla",
-    "Batticaloa",
-    "Colombo",
-    "Galle",
-    "Gampaha",
-    "Hambantota",
-    "Jaffna",
-    "Kalutara",
-    "Kandy",
-    "Kegalle",
-    "Kilinochchi",
-    "Kurunegala",
-    "Mannar",
-    "Matale",
-    "Matara",
-    "Moneragala",
-    "Mullaitivu",
-    "Nuwara Eliya",
-    "Polonnaruwa",
-    "Puttalam",
-    "Ratnapura",
-    "Trincomalee",
-    "Vavuniya",
-  ];
+function Filter(props) {
+  const [filterSubject, setFilterSubject] = useState(props.filterSubject);
+  const [filterPhysical, setFilterPhysical] = useState(props.filterPhysical);
 
   const onSubmit = (e) => {
+    props.resetPageNumber(1);
     e.preventDefault();
-
-    const filterData = { subject: filterSubject, physical: filterPhysical };
-    dispatch(addFilter(filterData));
+    props.onSubmit();
   };
   return (
     <section className="form">
@@ -59,7 +26,10 @@ function Filter() {
             searchable
             clearable
             placeholder="Any Subject"
-            onChange={setFilterSubject}
+            onChange={(e) => {
+              setFilterSubject(e);
+              props.setSubject(e);
+            }}
           />
         </div>
 
@@ -74,7 +44,10 @@ function Filter() {
             searchable
             clearable
             placeholder="Any District"
-            onChange={setFilterPhysical}
+            onChange={(e) => {
+              setFilterPhysical(e);
+              props.setPhysical(e);
+            }}
           />
         </div>
         <div className="form-group">

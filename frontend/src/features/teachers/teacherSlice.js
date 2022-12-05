@@ -7,31 +7,16 @@ const initialState = {
   isSuccess: false,
   isLoading: false,
   message: "",
+  numberOfTeachers: 0,
 };
 
-export const addFilter = createAsyncThunk(
-  "teachers/addFilter",
+export const getTeachers = createAsyncThunk(
+  "teachers/getTeachers",
   async (filterData, thunkAPI) => {
     try {
-      return await teacherService.addFilter(filterData);
-    } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
+      const teacherData = await teacherService.getTeachers(filterData);
 
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-
-export const getTeachers = createAsyncThunk(
-  "teachers/getAll",
-  async (_, thunkAPI) => {
-    try {
-      return await teacherService.getTeachers();
+      return teacherData;
     } catch (error) {
       const message =
         (error.response &&
@@ -95,23 +80,10 @@ export const teacherSlice = createSlice({
       .addCase(getTeachers.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.teachers = action.payload;
+        state.teachers = action.payload.teachers;
+        state.numberOfTeachers = action.payload.numberOfTeachers;
       })
       .addCase(getTeachers.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
-        state.teacherData = null;
-      })
-      .addCase(addFilter.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(addFilter.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.teachers = action.payload;
-      })
-      .addCase(addFilter.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

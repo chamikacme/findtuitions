@@ -7,7 +7,7 @@ const { findOne } = require("../models/teacherModel");
 // @dec get Teachers
 // @route GET api/teachers
 const getTeachers = asyncHandler(async (req, res) => {
-  const { subject, physical, online } = req.body;
+  const { subject, physical, online, page, perPage } = req.body;
   let subjectFilter = {};
   let physicalFilter = {};
   let onlineFilter = {};
@@ -21,13 +21,22 @@ const getTeachers = asyncHandler(async (req, res) => {
   if (online) {
     onlineFilter = { online: online };
   }
-  const teachers = await Teacher.find(
-    {
-      $and: [subjectFilter, physicalFilter, onlineFilter],
-    },
-    { password: 0 }
-  );
-  res.status(200).json(teachers);
+
+  const query = {
+    $and: [subjectFilter, physicalFilter, onlineFilter],
+  };
+
+  const teachers = await Teacher.find(query)
+    .limit(perPage)
+    .skip(perPage * (page - 1));
+
+  const numberOfTeachers = await Teacher.countDocuments(query);
+
+  console.log(`count: ${numberOfTeachers}`);
+
+  res
+    .status(200)
+    .json({ teachers: teachers, numberOfTeachers: numberOfTeachers });
 });
 
 // @dec get Teacher (public)

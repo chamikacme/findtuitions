@@ -1,8 +1,6 @@
 import { useParams } from "react-router-dom";
 import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import Spinner from "../components/Spinner";
-import { reset, getTeacher } from "../features/teachers/teacherSlice";
 import axios from "axios";
 import { useState } from "react";
 import ViewProfile from "../components/ViewProfile";
@@ -10,31 +8,21 @@ import ViewProfile from "../components/ViewProfile";
 function PublicProfile() {
   const { username } = useParams();
 
-  const [profileData, setProfileData] = useState(null);
-
-  const getTeacherData = () => {
-    const teacherUsername = username;
-    const API_URL = "/api/teachers/";
-    axios.get(API_URL + teacherUsername).then((res) => {
-      console.log(res.data);
-      setProfileData(res.data);
-    });
-  };
+  const [profiledata, setProfiledata] = useState(null);
 
   useEffect(() => {
-    const teacherUsername = username;
     const API_URL = "/api/teachers/";
-    axios.get(API_URL + teacherUsername).then((res) => {
+    axios.get(API_URL + username).then((res) => {
       console.log(res.data);
-      setProfileData(res.data);
+      setProfiledata(res.data);
     });
-  }, []);
+  }, [username]);
 
-  if (!profileData) {
+  if (!profiledata) {
     return <Spinner />;
   }
 
-  if (!profileData.found) {
+  if (!profiledata.found) {
     return (
       <>
         <h1>No teacher found!</h1>
@@ -44,7 +32,7 @@ function PublicProfile() {
 
   return (
     <div>
-      <ViewProfile data={profileData.data} />
+      <ViewProfile data={profiledata.data} />
     </div>
   );
 }

@@ -457,6 +457,10 @@ text-align: left;
   margin-bottom: 20px;
 }
 
+.pagination-bar{
+  margin: 10px;
+}
+
 .loadingSpinnerContainer {
   position: fixed;
   top: 0;
